@@ -1,0 +1,73 @@
+TARGET=libplist.a
+TARGETXX=libplist++.a
+
+ifdef LIBXML2_DIR
+  XMLDIR=$(LIBXML2_DIR)
+else
+  XMLDIR=../libxml2
+endif
+
+CFLAGS=-Iinclude -Ilibcnary/include -I$(XMLDIR)/include -Wall -O3 -fPIC
+
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+  check_arch = $(shell if as -arch $(1) < /dev/null > /dev/null; then echo yes; else echo no; fi)
+  ifeq ($(call check_arch,i386), yes)
+    CFLAGS+=-arch i386
+  endif
+  ifeq ($(call check_arch,x86_64), yes)
+    CFLAGS+=-arch x86_64
+  endif
+  ifeq ($(call check_arch,ppc), yes)
+    CFLAGS+=-arch ppc
+  endif
+  ifeq ($(call check_arch,ppc64), yes)
+    CFLAGS+=-arch ppc64
+  endif
+endif
+
+CXXFLAGS=$(CFLAGS)
+
+objects= \
+	libcnary/iterator.o \
+	libcnary/list.o \
+	libcnary/node.o \
+	libcnary/node_iterator.o \
+	libcnary/node_list.o \
+	src/base64.o \
+	src/bplist.o \
+	src/bytearray.o \
+	src/hashtable.o \
+	src/plist.o \
+	src/ptrarray.o \
+	src/xplist.o \
+
+objectsxx= \
+	src/Node.cpp.o \
+	src/Boolean.cpp.o \
+	src/Integer.cpp.o \
+	src/Real.cpp.o \
+	src/String.cpp.o \
+	src/Date.cpp.o \
+	src/Data.cpp.o \
+	src/Structure.cpp.o \
+	src/Array.cpp.o \
+	src/Dictionary.cpp.o \
+
+all: $(TARGET) $(TARGETXX)
+
+%.o: %.c
+	$(CC) -o $@ $(CFLAGS) -c $<
+
+%.cpp.o: %.cpp
+	$(CXX) -o $@ $(CXXFLAGS) -c $<
+
+$(TARGET): $(objects)
+	$(AR) rcs $@ $^
+
+$(TARGETXX): $(objectsxx)
+	$(AR) rcs $@ $^
+
+clean:
+	rm -f libcnary/*.o src/*.o $(TARGET) $(TARGETXX)
+
