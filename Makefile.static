@@ -7,7 +7,7 @@ else
   XMLDIR=../libxml2
 endif
 
-CFLAGS=-Iinclude -Ilibcnary/include -I$(XMLDIR)/include -Wall -O3 -fPIC
+CFLAGS=-m32 -Iinclude -Ilibcnary/include -I$(XMLDIR)/include -Wall -O3 -fPIC
 
 UNAME := $(shell uname)
 ifeq ($(UNAME), Darwin)
@@ -15,14 +15,8 @@ ifeq ($(UNAME), Darwin)
   ifeq ($(call check_arch,i386), yes)
     CFLAGS+=-arch i386
   endif
-  ifeq ($(call check_arch,x86_64), yes)
-    CFLAGS+=-arch x86_64
-  endif
   ifeq ($(call check_arch,ppc), yes)
     CFLAGS+=-arch ppc
-  endif
-  ifeq ($(call check_arch,ppc64), yes)
-    CFLAGS+=-arch ppc64
   endif
 endif
 
