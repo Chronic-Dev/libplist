@@ -1,0 +1,5 @@
+libcnary/*.o
+src/*.o
+libplist.a
+libplist++.a
+

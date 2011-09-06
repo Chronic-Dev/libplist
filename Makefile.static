@@ -11,7 +11,7 @@ CFLAGS=-Iinclude -Ilibcnary/include -I$(XMLDIR)/include -Wall -O3 -fPIC
 
 UNAME := $(shell uname)
 ifeq ($(UNAME), Darwin)
-  check_arch = $(shell if as -arch $(1) < /dev/null > /dev/null; then echo yes; else echo no; fi)
+  check_arch = $(shell if as -arch $(1) -o /dev/null < /dev/null > /dev/null; then echo yes; else echo no; fi)
   ifeq ($(call check_arch,i386), yes)
     CFLAGS+=-arch i386
   endif
