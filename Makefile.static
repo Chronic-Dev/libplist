@@ -7,7 +7,7 @@ else
   XMLDIR=../libxml2
 endif
 
-CFLAGS=-m32 -Iinclude -Ilibcnary/include -I$(XMLDIR)/include -Wall -O3
+CFLAGS=-m32 -Iinclude -Ilibcnary/include -I$(XMLDIR)/include -Wall -O3 -DLIBXML_STATIC=1
 
 UNAME := $(shell uname)
 ifeq ($(UNAME), Darwin)
