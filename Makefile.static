@@ -7,7 +7,7 @@ else
   XMLDIR=../libxml2
 endif
 
-CFLAGS=-m32 -Iinclude -Ilibcnary/include -I$(XMLDIR)/include -Wall -O3 -fPIC
+CFLAGS=-m32 -Iinclude -Ilibcnary/include -I$(XMLDIR)/include -Wall -O3
 
 UNAME := $(shell uname)
 ifeq ($(UNAME), Darwin)
@@ -18,9 +18,27 @@ ifeq ($(UNAME), Darwin)
   ifeq ($(call check_arch,ppc), yes)
     CFLAGS+=-arch ppc
   endif
+  CFLAGS+=-fPIC
+endif
+
+ifeq ($(UNAME), Linux)
+  CFLAGS+=-fPIC
 endif
 
 CXXFLAGS=$(CFLAGS)
+
+WIN32=
+ifeq ($(findstring CYG,$(UNAME)), CYG)
+  WIN32=1
+  CC=gcc-3
+endif
+ifeq ($(findstring MINGW,$(UNAME)), MINGW)
+  WIN32=1
+  CC=gcc
+endif
+ifdef WIN32
+  CFLAGS+=-DWIN32
+endif
 
 objects= \
 	libcnary/iterator.o \
